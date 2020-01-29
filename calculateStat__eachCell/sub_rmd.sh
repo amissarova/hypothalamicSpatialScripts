@@ -12,7 +12,7 @@ script_name=calcStat
 memory=500000
 r_command="rusage[mem=${memory}]"
 #num_processors
-nproc=400
+nproc=20
 
 smg=/nfs/research1/marioni/jonny/singularity/FAS2019.simg
 script=/nfs/research1/marioni/alsu/spatial/MER_hypothalamic/hypothalamicSpatialScripts/calculateStat__eachCell/run_rmd.R

@@ -20,7 +20,7 @@ library(BiocNeighbors)
 library(scater)
 library(ggplot2)
 
-ncores = 400
+ncores = 20
 mcparam = SnowParam(workers = ncores)
 register(mcparam)
 
