@@ -20,6 +20,7 @@ library(BiocNeighbors)
 library(scater)
 library(ggplot2)
 library(dplyr)
+library(fields)
 
 ncores = 20
 mcparam = SnowParam(workers = ncores)
@@ -44,7 +45,6 @@ cell.locations = read.table(paste0(data.dir,
                                    'cell_locations/merFISH_3D_data_cell_locations.txt'), header=T, sep="\t")
 cell.types = read.table(paste0(data.dir,
                                'raw_data/merFISH_3D_data_cell_types.txt'), header=T, sep="\t")
-
 
 # get different matrices for transcriptional profile: 
 transcr.profile = getCounts(logcounts(sce), cell.types)
