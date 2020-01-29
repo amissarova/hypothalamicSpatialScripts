@@ -1,0 +1,68 @@
+---
+title: "Calculating stat for each cell"
+output:
+  BiocStyle::html_document:
+    code_folding: hide
+    number_sections: yes
+    toc: yes  
+    titlecaps: true
+---
+Load libraries and data.
+
+```{r load-data, message = FALSE, warning = FALSE}
+
+library(Matrix)
+library(scran)
+library(biomaRt)
+library(BiocSingular)
+library(BiocParallel)
+library(BiocNeighbors)
+library(scater)
+library(ggplot2)
+
+ncores = 400
+mcparam = SnowParam(workers = ncores)
+register(mcparam)
+
+data.dir = "/nfs/research1/marioni/alsu/spatial/MER_hypothalamic/2018_merFISH_science_hypo_preoptic/"
+save.dir = "/nfs/research1/marioni/alsu/spatial/MER_hypothalamic/data/"
+#data.dir = "/Users/alsu/Develop/CT_signalling/MER_hypothalamic/2018_merFISH_science_hypo_preoptic/"
+#save.dir = "/Users/alsu/Develop/CT_signalling/MER_hypothalamic/data/"
+
+source("/nfs/research1/marioni/alsu/spatial/core_functions.R")
+#source("/Users/alsu/Develop/CT_signalling/core_functions.R")
+
+set.seed(42)
+
+# load original data: counts (gonna work with logcounts), cell type and cell locations
+counts = read.table(paste0(data.dir,
+                           'count_matrix/merFISH_3D_data_expression.txt'), header=T, sep="\t")
+sce = SingleCellExperiment(assays = list("counts" = as.matrix( counts )))
+sce = scater::normalize(sce)
+cell.locations = read.table(paste0(data.dir,
+                                   'cell_locations/merFISH_3D_data_cell_locations.txt'), header=T, sep="\t")
+cell.types = read.table(paste0(data.dir,
+                               'raw_data/merFISH_3D_data_cell_types.txt'), header=T, sep="\t")
+
+
+# get different matrices for transcriptional profile: 
+transcr.profile = getCounts(logcounts(sce), cell.types)
+
+```
+
+# Generate piece-wise data 
+
+```{r get-stat}
+
+N = nrow(cell.locations)
+quantile.step = 0.002
+stat = bplapply(1:N, function(x){
+  out = getStatForOneCell(x, transcr.profile, cell.locations, quantile.step) 
+  return(out)
+}, BPPARAM=mcparam)
+names(stat) = 1:N
+stat = bind_rows(stat, ".id" = "cell")
+
+write.table(stat, file = paste0(save.dir, "corr_slope_knot__stat.tab"), row.names = F, col.names = T, quote = F, sep = "\t")
+
+```
