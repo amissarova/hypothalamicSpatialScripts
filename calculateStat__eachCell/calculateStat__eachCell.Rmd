@@ -58,6 +58,7 @@ transcr.profile = getCounts(logcounts(sce), cell.types)
 N = nrow(cell.locations)
 quantile.step = 0.002
 stat = bplapply(1:N, function(x){
+  source("/nfs/research1/marioni/alsu/spatial/core_functions.R")
   out = getStatForOneCell(x, transcr.profile, cell.locations, quantile.step) 
   return(out)
 }, BPPARAM=mcparam)
