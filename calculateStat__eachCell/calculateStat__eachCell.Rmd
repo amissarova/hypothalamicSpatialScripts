@@ -19,6 +19,7 @@ library(BiocParallel)
 library(BiocNeighbors)
 library(scater)
 library(ggplot2)
+library(dplyr)
 
 ncores = 20
 mcparam = SnowParam(workers = ncores)
