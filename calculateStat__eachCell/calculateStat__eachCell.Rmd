@@ -58,11 +58,11 @@ transcr.profile = getCounts(logcounts(sce), cell.types)
 
 N = nrow(cell.locations)
 quantile.step = 0.004
-stat = bplapply(1:N, function(x){
+stat = lapply(1:N, function(x){
   print(x/N)
   out = getStatForOneCell(x, transcr.profile, cell.locations, quantile.step) 
   return(out)
-}, BPPARAM=mcparam)
+})
 names(stat) = 1:N
 stat = bind_rows(stat, ".id" = "cell")
 
