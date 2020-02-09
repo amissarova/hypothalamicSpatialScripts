@@ -28,11 +28,11 @@ register(mcparam)
 
 data.dir = "/nfs/research1/marioni/alsu/spatial/MER_hypothalamic/2018_merFISH_science_hypo_preoptic/"
 save.dir = "/nfs/research1/marioni/alsu/spatial/MER_hypothalamic/data/"
-#data.dir = "/Users/alsu/Develop/CT_signalling/MER_hypothalamic/2018_merFISH_science_hypo_preoptic/"
-#save.dir = "/Users/alsu/Develop/CT_signalling/MER_hypothalamic/data/"
+#data.dir = "/Users/alsu/Develop/spatial/MER_hypothalamic/2018_merFISH_science_hypo_preoptic/"
+#save.dir = "/Users/alsu/Develop/spatial/MER_hypothalamic/data/"
 
 source("/nfs/research1/marioni/alsu/spatial/core_functions.R")
-#source("/Users/alsu/Develop/CT_signalling/core_functions.R")
+#source("/Users/alsu/Develop/spatial/core_functions.R")
 
 set.seed(42)
 
@@ -46,6 +46,7 @@ cell.locations = read.table(paste0(data.dir,
 cell.types = read.table(paste0(data.dir,
                                'raw_data/merFISH_3D_data_cell_types.txt'), header=T, sep="\t")
 
+
 # get different matrices for transcriptional profile: 
 transcr.profile = getCounts(logcounts(sce), cell.types)
 
@@ -56,9 +57,9 @@ transcr.profile = getCounts(logcounts(sce), cell.types)
 ```{r get-stat}
 
 N = nrow(cell.locations)
-quantile.step = 0.002
+quantile.step = 0.004
 stat = bplapply(1:N, function(x){
-  source("/nfs/research1/marioni/alsu/spatial/core_functions.R")
+  print(x/N)
   out = getStatForOneCell(x, transcr.profile, cell.locations, quantile.step) 
   return(out)
 }, BPPARAM=mcparam)
