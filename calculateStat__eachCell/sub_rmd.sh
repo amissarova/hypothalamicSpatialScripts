@@ -14,7 +14,7 @@ r_command="rusage[mem=${memory}]"
 #num_processors
 nproc=20
 
-smg=/nfs/research1/marioni/jonny/singularity/R1.simg
+smg=/nfs/research1/marioni/alsu/singularity/R1.simg
 script=/nfs/research1/marioni/alsu/spatial/MER_hypothalamic/hypothalamicSpatialScripts/calculateStat__eachCell/run_rmd.R
 
 bsub -q research-rh74 -e ${err_folder}/${script_name} \
