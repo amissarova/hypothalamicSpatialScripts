@@ -9,7 +9,7 @@ script_name=par_calcStat
 
 #CHOOSE PARAMETERS
 #RAM in megabytes
-memory=500000
+memory=100000
 r_command="rusage[mem=${memory}]"
 #num_processors
 nproc=20
@@ -18,6 +18,6 @@ smg=/nfs/research1/marioni/alsu/singularity/R1.simg
 script=/nfs/research1/marioni/alsu/spatial/MER_hypothalamic/hypothalamicSpatialScripts/parallel__calculateStat__eachCell/run_rmd.R
 
 bsub -q research-rh74 -e ${err_folder}/${script_name} \
--o ${out_folder}/${script_name} -P bigmem \
+-o ${out_folder}/${script_name} \
 -M $memory -R $r_command -n $nproc -J ${script_name} \
 "singularity exec $smg Rscript $script"
