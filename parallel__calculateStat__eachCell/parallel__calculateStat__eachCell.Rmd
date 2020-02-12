@@ -23,7 +23,7 @@ library(dplyr)
 library(fields)
 
 ncores = 20
-mcparam = SnowParam(workers = ncores)
+mcparam = MulticoreParam(workers = ncores)
 register(mcparam)
 
 data.dir = "/nfs/research1/marioni/alsu/spatial/MER_hypothalamic/2018_merFISH_science_hypo_preoptic/"
@@ -60,8 +60,7 @@ N = c(1:nrow(cell.locations))
 quantile.step = 0.004
 
 stat = bplapply(N, function(x){
-  out = getStatForOneCell(x, transcr.profile, cell.locations, quantile.step) 
-  return(out)
+  getStatForOneCell(x, transcr.profile, cell.locations, quantile.step) 
 }, BPPARAM=mcparam)
 names(stat) = N
 stat = bind_rows(stat, ".id" = "cell")
